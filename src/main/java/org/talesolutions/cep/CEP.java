@@ -10,9 +10,6 @@ import java.io.Serializable;
 public class CEP implements Serializable {
 
 	private static final long serialVersionUID = -3046561560949012411L;
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 	private final int numero;
 	private final String logradouro;
@@ -22,7 +19,6 @@ public class CEP implements Serializable {
 
 	public CEP(int numero, String logradouro, String bairro, String localidade,
 			String uf) {
-		super();
 		this.numero = numero;
 		this.logradouro = logradouro;
 		this.bairro = bairro;
@@ -109,6 +105,5 @@ public class CEP implements Serializable {
 		}
 		return true;
 	}
-	
 	
 }
