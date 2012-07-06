@@ -4,7 +4,7 @@
 
 	<groupId>org.talesolutions</groupId>
 	<artifactId>busca-cep-client</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<description>Biblioteca utilitária que facilita a consulta de CEPs utilizando o serviço de busca de CEPs disponibilizado nos sites dos Correios</description>
 	<name>busca-cep-client</name>
@@ -12,11 +12,11 @@
 	<distributionManagement>
 		<repository>
 			<id>repo</id>
-			<url>https://github.com/fabito/talesolutions-mvn-repo/raw/master/releases</url>
+			<url>https://raw.github.com/fabito/talesolutions-mvn-repo/master/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshot-repo</id>
-			<url>https://github.com/fabito/talesolutions-mvn-repo/raw/master/snapshots</url>
+			<url>https://raw.github.com/fabito/talesolutions-mvn-repo/master/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
