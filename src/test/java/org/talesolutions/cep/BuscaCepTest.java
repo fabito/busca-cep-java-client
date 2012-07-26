@@ -12,10 +12,11 @@ import org.junit.Test;
 
 public class BuscaCepTest {
 
-	private static final CEP FLORDALISA_AMALIA_GRIGOL_COGHI = new CEP(13084440,
+	private static final String VALID_CEP = "13084440";
+	private static final CEP FLORDALISA_AMALIA_GRIGOL_COGHI = new CEP("13084440",
 			"Rua Flordalisa Amália Grigol Coghi", "Jardim América", "Campinas",
 			"SP");
-	private static final CEP FLORDALISA_MEIRA_MONTE = new CEP(17065340,
+	private static final CEP FLORDALISA_MEIRA_MONTE = new CEP("17065340",
 			"Rua Flordalisa Meira Monte", "Núcleo Habitacional Ver", "Bauru",
 			"SP");
 	
@@ -33,23 +34,23 @@ public class BuscaCepTest {
 
 	@Test
 	public void busca_por_cep_valido() {
-		CEP cep = buscaCEP.obtemPorNumeroCEP(13084440);
+		CEP cep = buscaCEP.obtemPorNumeroCEP(VALID_CEP);
 		assertThat(cep, equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
 	}
 
 	@Test
 	public void multiplas_buscas_por_cep_valido() {
-		CEP cep = buscaCEP.obtemPorNumeroCEP(13084440);
+		CEP cep = buscaCEP.obtemPorNumeroCEP(VALID_CEP);
 		assertThat(cep, equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
-		cep = buscaCEP.obtemPorNumeroCEP(13084440);
+		cep = buscaCEP.obtemPorNumeroCEP(VALID_CEP);
 		assertThat(cep, equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
-		cep = buscaCEP.obtemPorNumeroCEP(13084440);
+		cep = buscaCEP.obtemPorNumeroCEP(VALID_CEP);
 		assertThat(cep, equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
 	}
 	
 	@Test(expected=CEPNaoEncontradoException.class)
 	public void busca_por_cep_invalido_deve_lancar_excecao() {
-		buscaCEP.obtemPorNumeroCEP(1308444000);
+		buscaCEP.obtemPorNumeroCEP("1308444000");
 	}
 	
 	@Test

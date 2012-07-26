@@ -15,7 +15,7 @@ public interface CEPService {
 	 * @throws <code>{@link CEPNaoEncontradoException}</code> caso o número fornecido não retorne nada
 	 * @throws <code>{@link CEPServiceFailureException}</code> no caso de falha no serviço
 	 */
-	public abstract CEP obtemPorNumeroCEP(int numeroCEP);
+	public abstract CEP obtemPorNumeroCEP(String numeroCEP);
 
 	/**
 	 * Obtem os <code>{@link CEP}s</code> que satisfazem o termo fornecido

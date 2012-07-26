@@ -41,8 +41,8 @@ class BuscaCEP implements CEPService {
 	 * @see org.talesolutions.cep.CEPService#obtemPorNumeroCEP(int)
 	 */
 	@Override
-	public CEP obtemPorNumeroCEP(int numeroCEP) {
-		final HtmlTable table = getHtmlTableWithResults(Integer.toString(numeroCEP));
+	public CEP obtemPorNumeroCEP(String numeroCEP) {
+		final HtmlTable table = getHtmlTableWithResults(numeroCEP);
 		HtmlTableRow row = table.getRow(0);
 		return criaCEP(row);
 	}
@@ -83,7 +83,7 @@ class BuscaCEP implements CEPService {
 
 	private CEP criaCEP(HtmlTableRow row) {
 		return new CEP(
-				Integer.parseInt(StringUtils.remove(row.getCell(4).asText(), HIFEN)), 
+				StringUtils.remove(row.getCell(4).asText(), HIFEN), 
 				row.getCell(0).asText(),
 				row.getCell(1).asText(),
 				row.getCell(2).asText(),
