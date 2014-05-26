@@ -27,7 +27,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 class BuscaCEP implements CEPService {
 
 	private static final String HIFEN = "-";
-	private static final String XPATH_TABELA_RESULTADO_CONSULTA = "//*[@id='lamina']/div[2]/div[2]/div[2]/div/table[1]";
+	private static final String XPATH_TABELA_RESULTADO_CONSULTA = "//table[@bgcolor='gray']";
 	private static final String BUSCA_CEP_SERVICE_BASE_URL = "http://www.buscacep.correios.com.br/servicos/dnec/consultaLogradouroAction.do?Metodo=listaLogradouro&TipoConsulta=relaxation&StartRow=1&EndRow=10&relaxation=";
 
 	private WebClient getWebClient() {
