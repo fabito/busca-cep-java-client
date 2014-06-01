@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: "jacoco"
 apply plugin: 'coveralls'
 
-version =  '1.3'
+version =  '1.4-rc'
 group = 'com.github.fabito'
 
 buildscript {
