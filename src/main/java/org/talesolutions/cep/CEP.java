@@ -96,4 +96,12 @@ public class CEP implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "CEP [numero=" + numero + ", logradouro=" + logradouro
+				+ ", bairro=" + bairro + ", localidade=" + localidade + ", uf="
+				+ uf + "]";
+	}
+	
 }

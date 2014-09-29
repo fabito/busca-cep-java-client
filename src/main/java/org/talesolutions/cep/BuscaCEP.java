@@ -1,93 +1,96 @@
 package org.talesolutions.cep;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
- * Invoca a busca de CEP disponível no site dos correios e extrai os resultados do html retornado.
- * Esta implementação utiliza HtmlUnit para fazer a requisição GET ao serviço dos Correios e também 
- * fazer o extrair os dados do HTML via XPath
+ * Invoca a busca de CEP disponível no site dos correios e extrai os resultados
+ * do html retornado. Esta implementação utiliza Jsoup para fazer a
+ * requisição GET ao serviço dos Correios e também fazer o extrair os dados do
+ * HTML
  * 
  * O serviço invocado por essa implementação roda na seguinte URL:
  * 
- * http://www.buscacep.correios.com.br/servicos/dnec/consultaLogradouroAction.do
+ * http://www.buscacep.correios.com.br/servicos/dnec/consultaEnderecoAction.do
  * 
  * @author Fábio Franco Uechi
  */
 class BuscaCEP implements CEPService {
 
+	private static final int NUM_INDEX = 4;
+	private static final int LOGRADOURO_INDEX = 0;
+	private static final int BAIRRO_INDEX = 1;
+	private static final int LOCALIDADE_INDEX = 2;
+	private static final int UF_INDEX = 3;
 	private static final String HIFEN = "-";
-	private static final String XPATH_TABELA_RESULTADO_CONSULTA = "//table[@bgcolor='gray']";
-	private static final String BUSCA_CEP_SERVICE_BASE_URL = "http://www.buscacep.correios.com.br/servicos/dnec/consultaLogradouroAction.do?Metodo=listaLogradouro&TipoConsulta=relaxation&StartRow=1&EndRow=10&relaxation=";
+	private static final String BUSCA_CEP_SERVICE_BASE_URL = "http://www.buscacep.correios.com.br/servicos/dnec/consultaEnderecoAction.do?relaxation=%s&TipoCep=ALL&semelhante=S&cfm=1&Metodo=listaLogradouro&TipoConsulta=relaxation";
 
-	private WebClient getWebClient() {
-		WebClient webClient = new WebClient();
-		webClient.setJavaScriptEnabled(false);
-		webClient.setCssEnabled(false);
-		return webClient;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.talesolutions.cep.CEPService#obtemPorNumeroCEP(int)
-	 */
 	@Override
 	public CEP obtemPorNumeroCEP(String numeroCEP) {
-		final HtmlTable table = getHtmlTableWithResults(numeroCEP);
-		HtmlTableRow row = table.getRow(0);
-		return criaCEP(row);
+		Elements rows = busca(numeroCEP);
+		for (Element row : rows) {
+			CEP cep = cep(row);
+			return cep;
+		}
+		throw new CEPNaoEncontradoException(numeroCEP, null);
 	}
 
-	private HtmlTable getHtmlTableWithResults(String query){
+	private Elements busca(String q) {
 		try {
-			final HtmlPage page = getWebClient()
-					.getPage(BUSCA_CEP_SERVICE_BASE_URL + query);
-			final HtmlTable table = (HtmlTable) page.getByXPath(
-					XPATH_TABELA_RESULTADO_CONSULTA).get(
-					0);
-			return table;
-		} catch (FailingHttpStatusCodeException e) {
-			throw new CEPServiceFailureException(e);
-		} catch (MalformedURLException e) {
-			throw new CEPServiceFailureException(e);
-		} catch (IndexOutOfBoundsException e) {
-			throw new CEPNaoEncontradoException(query, e);
+			Document doc = Jsoup.connect(
+					String.format(BUSCA_CEP_SERVICE_BASE_URL, URLEncoder.encode(q, "ISO-8859-1"))).get();
+			Elements rows = doc.getElementsByAttributeValueMatching("onclick",
+					"javascript:detalharCep.*");
+			return rows;
 		} catch (IOException e) {
 			throw new CEPServiceFailureException(e);
-		} finally {
-			getWebClient().closeAllWindows();
-		}
+		}		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.talesolutions.cep.CEPService#obtemPorEndereco(java.lang.String)
-	 */
+	private CEP cep(Element row) {
+		Elements cols = row.getElementsByTag("td");
+		CEP cep = new CEP(numero(cols), logradouro(cols), bairro(cols), localidade(cols), uf(cols));
+		return cep;
+	}
+
+	private String uf(Elements cols) {
+		return cols.get(UF_INDEX).text();
+	}
+
+	private String localidade(Elements cols) {
+		return cols.get(LOCALIDADE_INDEX).text();
+	}
+
+	private String bairro(Elements cols) {
+		return cols.get(BAIRRO_INDEX)
+				.text();
+	}
+
+	private String logradouro(Elements cols) {
+		return cols.get(LOGRADOURO_INDEX).text();
+	}
+
+	private String numero(Elements cols) {
+		String num = cols.get(NUM_INDEX).text();
+		return num.contains(HIFEN) ?  num.replace(HIFEN, "") : num ;
+	}
+
 	@Override
 	public List<CEP> obtemPorEndereco(String query) {
-		final HtmlTable table = getHtmlTableWithResults(query);
-		List<CEP> ceps = new ArrayList<CEP>(table.getRows().size());
-		for (HtmlTableRow row : table.getRows()) {
-			ceps.add(criaCEP(row));
+		Elements rows = busca(query);
+		List<CEP> ceps = new ArrayList<CEP>(rows.size());
+		for (Element row : rows) {
+			CEP cep = cep(row);
+			ceps.add(cep);
 		}
 		return ceps;
 	}
 
-	private CEP criaCEP(HtmlTableRow row) {
-		return new CEP(
-				StringUtils.remove(row.getCell(4).asText(), HIFEN), 
-				row.getCell(0).asText(),
-				row.getCell(1).asText(),
-				row.getCell(2).asText(),
-				row.getCell(3).asText()
-		);
-	}
 }

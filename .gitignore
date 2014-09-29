@@ -4,3 +4,4 @@
 .classpath
 build
 .gradle
+/bin/
