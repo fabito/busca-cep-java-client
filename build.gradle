@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: "jacoco"
-apply plugin: 'coveralls'
+apply plugin: "com.github.kt3k.coveralls"
 
 version =  '1.5'
 group = 'com.github.fabito'
@@ -13,14 +13,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
     }
 }
 	
 def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
 repositories {
     mavenCentral()
-    mavenRepo url: localMavenRepo
+    
+    maven {
+        url localMavenRepo
+    }    
 }
 
 jar {
@@ -43,7 +46,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.1'
 }
 
 artifacts {
