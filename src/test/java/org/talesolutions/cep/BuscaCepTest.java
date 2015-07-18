@@ -35,6 +35,8 @@ public class BuscaCepTest {
 	@Test
 	public void busca_por_cep_valido() {
 		CEP cep = buscaCEP.obtemPorNumeroCEP(VALID_CEP);
+		
+		System.out.println(cep); 
 		assertThat(cep, equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
 	}
 
@@ -55,17 +57,24 @@ public class BuscaCepTest {
 	
 	@Test
 	public void busca_por_endereco_com_um_match() {
-		List<CEP> ceps = buscaCEP.obtemPorEndereco("Rua Flordalisa Amália Grigol Coghi");
+		List<CEP> ceps = buscaCEP.obtemPorEndereco("Rua Flordalisa Amalia Grigol Coghi");
 		assertNotNull(ceps);
 		assertThat(ceps.size(), equalTo(1));
 		assertThat(ceps.get(0), equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
 	}
 
 	@Test
+	public void busca_por_endereco_com_acento() {
+		List<CEP> ceps = buscaCEP.obtemPorEndereco("Rua Flordalisa Amália Grigol Coghi");
+		assertNotNull(ceps);
+		assertThat(ceps.size(), equalTo(1));
+		assertThat(ceps.get(0), equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
+	}
+	@Test
 	public void busca_por_endereco_com_varios_matches() {
 		List<CEP> ceps = buscaCEP.obtemPorEndereco("Flordalisa");
 		assertNotNull(ceps);
-		assertThat(ceps.size(), equalTo(2));
+		assertThat(ceps.size(), equalTo(10));
 		assertThat(ceps.get(0), equalTo(FLORDALISA_MEIRA_MONTE));
 		assertThat(ceps.get(1), equalTo(FLORDALISA_AMALIA_GRIGOL_COGHI));
 	}
