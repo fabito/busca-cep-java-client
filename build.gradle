@@ -1,22 +1,26 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-apply plugin: "jacoco"
-apply plugin: 'coveralls'
-
-version =  '1.4-rc'
-group = 'com.github.fabito'
-
 buildscript {
     repositories {
+        jcenter()
         mavenCentral()
     }
 
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.3.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
     }
 }
-	
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: "jacoco"
+apply plugin: 'coveralls'
+apply plugin: 'com.jfrog.bintray'
+
+version =  '1.4-rc'
+group = 'com.github.fabito'
+
+
 def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
 repositories {
     mavenCentral()
@@ -64,5 +68,17 @@ jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
         html.enabled = true
+    }
+}
+
+bintray {   
+    user = 'fabito'
+    key = '7ca969c0a340f47151443b41914845173d52b269'
+    pkg {
+        repo = 'maven'
+        name = 'gradle-project'
+        userOrg = 'fabito'
+        licenses = ['Apache-2.0','MIT']
+        vcsUrl = 'https://github.com/fabito/busca-cep-java-client.git'
     }
 }
