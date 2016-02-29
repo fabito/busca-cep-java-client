@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
     }
 }
@@ -16,7 +16,7 @@ apply plugin: "jacoco"
 apply plugin: "com.github.kt3k.coveralls"
 apply plugin: 'com.jfrog.bintray'
 
-version =  '1.5'
+version =  '1.7'
 group = 'com.github.fabito'
 
 def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
@@ -64,15 +64,26 @@ jacocoTestReport {
     }
 }
 
-bintray {   
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
+
+Properties properties = new Properties()
+try {
+	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+} catch(all) {
+}
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
+    dryRun = false 
+    publish = true    
     pkg {
         repo = 'maven'
         name = 'busca-cep-java-client'
         userOrg = 'fabito'
         licenses = ['Apache-2.0','MIT']
         vcsUrl = 'https://github.com/fabito/busca-cep-java-client.git'
+        issueTrackerUrl = 'https://github.com/fabito/busca-cep-java-client/issues'
+        labels = ['busca', 'cep', 'java', 'http', 'client', 'busca-cep']
     }
 }
