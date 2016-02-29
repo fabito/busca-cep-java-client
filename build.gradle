@@ -16,7 +16,7 @@ apply plugin: "jacoco"
 apply plugin: "com.github.kt3k.coveralls"
 apply plugin: 'com.jfrog.bintray'
 
-version =  '1.7'
+version =  '1.8'
 group = 'com.github.fabito'
 
 def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
