@@ -8,6 +8,23 @@ busca-cep-java-client
 
 API Java para invocar a busca de CEPs dos Correios
 
+```groovy
+#!/usr/bin/env groovy
+
+@Grapes([
+	@Grab('com.github.fabito:busca-cep-java-client:1.7')
+])
+
+import org.talesolutions.cep.CEPService
+import org.talesolutions.cep.CEPServiceFactory
+
+def buscaCEP = CEPServiceFactory.getCEPService()
+def cep = buscaCEP.obtemPorNumeroCEP("13084440")
+
+println cep
+```
+
+
 
 ### Setting up build tools 
 
