@@ -12,7 +12,7 @@ API Java para invocar a busca de CEPs dos Correios
 #!/usr/bin/env groovy
 
 @Grapes([
-	@Grab('com.github.fabito:busca-cep-java-client:1.7')
+	@Grab('com.github.fabito:busca-cep-java-client:1.8')
 ])
 
 import org.talesolutions.cep.CEPService
@@ -40,7 +40,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	compile 'com.github.fabito:busca-cep-java-client:1.7'
+	compile 'com.github.fabito:busca-cep-java-client:1.8'
 }
 ```
 
@@ -84,6 +84,6 @@ dependencies {
 <dependency>
   <groupId>com.github.fabito</groupId>
   <artifactId>busca-cep-java-client</artifactId>
-  <version>1.7</version>
+  <version>1.8</version>
 </dependency>
 ```
