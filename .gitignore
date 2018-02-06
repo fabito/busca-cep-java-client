@@ -6,3 +6,6 @@ build
 .gradle
 /bin/
 local.properties
+.idea/
+out/
+*.iml
