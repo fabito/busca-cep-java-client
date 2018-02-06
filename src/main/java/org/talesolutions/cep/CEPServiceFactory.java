@@ -14,7 +14,7 @@ public class CEPServiceFactory {
 	}
 
     /**
-     *
+     * @param numRetries número de retentativas
      * @return uma instância thread safe de CEPService
      */
     public static CEPService getCEPService(int numRetries) {
